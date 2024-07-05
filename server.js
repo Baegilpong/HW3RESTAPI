@@ -1,38 +1,37 @@
 const express = require('express');
-const bodyParser = require('body-parser');
 const cors = require('cors');
 
 const app = express();
-const port = 3000;
+const PORT = 3000;
 
-app.use(bodyParser.json());
+app.use(express.json());
 app.use(cors());
 
-let tasks = [
-  { id: 1, text: 'Wake up' },
-  { id: 2, text: 'Brush teeth' },
-  { id: 3, text: 'Check emails' }
-];
+let tasks = [];
 
-// Get all tasks
-app.get('/tasks', (req, res) => {
-  res.json(tasks);
+app.get('/api/tasks', (req, res) => {
+    res.json(tasks);
 });
 
-// Add a new task
-app.post('/tasks', (req, res) => {
-  const task = req.body;
-  tasks.push(task);
-  res.status(201).json(task);
+app.post('/api/tasks', (req, res) => {
+    const task = req.body;
+    tasks.push(task);
+    res.json(task);
 });
 
-// Delete a task
-app.delete('/tasks/:id', (req, res) => {
-  const taskId = parseInt(req.params.id, 10);
-  tasks = tasks.filter(task => task.id !== taskId);
-  res.status(204).send();
+app.put('/api/tasks/:id', (req, res) => {
+    const { id } = req.params;
+    const updatedTask = req.body;
+    tasks = tasks.map(task => task.id === id ? updatedTask : task);
+    res.json(updatedTask);
 });
 
-app.listen(port, () => {
-  console.log(`Server is running on http://localhost:${port}`);
+app.delete('/api/tasks/:id', (req, res) => {
+    const { id } = req.params;
+    tasks = tasks.filter(task => task.id !== id);
+    res.json({ message: 'Task deleted' });
+});
+
+app.listen(PORT, () => {
+    console.log(`Server is running on http://localhost:${port}`);
 });

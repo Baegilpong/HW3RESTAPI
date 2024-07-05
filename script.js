@@ -1,27 +1,27 @@
-let tasks = JSON.parse(localStorage.gettask('tasks')) || [];
+let tasks = JSON.parse(localStorage.getTask('tasks')) || [];
 
-document.addEventListener('DOMContentLoaded', rendertasks);
+document.addEventListener('DOMContentLoaded', renderTasks);
 
-function addtasks() {
-    const newtaskInput = document.getElementById('newTask');
-    const newtaskName = newtaskInput.value.trim();
+function addTask() {
+    const newTaskInput = document.getElementById('newTask');
+    const newTaskName = newTaskInput.value.trim();
 
-    if (newtaskName !== '') {
-        const newtask = { id: Date.now().toString(), name: newtaskName };
-        tasks.push(newtask);
-        localStorage.settask('tasks', JSON.stringify(tasks));
-        newtaskInput.value = '';
-        rendertasks();
+    if (newTaskName !== '') {
+        const newTask = { id: Date.now().toString(), name: newTaskName };
+        tasks.push(newTask);
+        localStorage.setTask('tasks', JSON.stringify(tasks));
+        newTaskInput.value = '';
+        renderTasks();
     }
 }
 
-function deletetask(id) {
+function deleteTask(id) {
     tasks = tasks.filter(task => task.id !== id);
-    localStorage.settask('tasks', JSON.stringify(tasks));
-    rendertasks();
+    localStorage.setTask('tasks', JSON.stringify(tasks));
+    renderTasks();
 }
 
-function rendertasks() {
+function renderTasks() {
     const taskList = document.getElementById('taskList');
     taskList.innerHTML = '';
 
@@ -31,7 +31,7 @@ function rendertasks() {
 
         const deleteButton = document.createElement('button');
         deleteButton.textContent = 'Delete';
-        deleteButton.onclick = () => deletetask(task.id);
+        deleteButton.onclick = () => deleteTask(task.id);
 
         li.appendChild(deleteButton);
         taskList.appendChild(li);
